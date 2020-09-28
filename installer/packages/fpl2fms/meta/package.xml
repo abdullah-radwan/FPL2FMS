@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>FPL2FMS</DisplayName>
+    <Description>Install FPL2FMS.</Description>
+    <Version>1.0</Version>
+    <ReleaseDate>2020-09-28</ReleaseDate>
+    <Licenses>
+        <License name="GPL v3" file="GPL v3.txt" />
+		<License name="MIT" file="MIT.txt" />
+    </Licenses>
+    <Default>true</Default>
+	<ForcedInstallation>true</ForcedInstallation>
+    <Essential>true</Essential>
+	<Script>installscript.qs</Script>
+</Package>

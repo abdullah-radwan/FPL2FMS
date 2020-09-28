@@ -1,0 +1,40 @@
+<Updates>
+ <ApplicationName>{AnyApplication}</ApplicationName>
+ <ApplicationVersion>1.0.0</ApplicationVersion>
+ <Checksum>true</Checksum>
+ <PackageUpdate>
+  <Name>fpl2fms</Name>
+  <DisplayName>FPL2FMS</DisplayName>
+  <Description>Install FPL2FMS.</Description>
+  <Version>1.0</Version>
+  <ReleaseDate>2020-09-28</ReleaseDate>
+  <Default>true</Default>
+  <ForcedInstallation>true</ForcedInstallation>
+  <Essential>true</Essential>
+  <Script>installscript.qs</Script>
+  <UpdateFile UncompressedSize="571142" CompressedSize="204556" OS="Any"/>
+  <DownloadableArchives>fpl2fms.7z</DownloadableArchives>
+  <Licenses>
+   <License file="GPL v3.txt" name="GPL v3"/>
+   <License file="MIT.txt" name="MIT"/>
+  </Licenses>
+  <SHA1>70d4e54ae4d2fd5f8c7a2de289eea5d702505eff</SHA1>
+ </PackageUpdate>
+ <PackageUpdate>
+  <Name>qt5</Name>
+  <DisplayName>Qt 5 binaries</DisplayName>
+  <Description>Install Qt 5 binaries.</Description>
+  <Version>5.15.1</Version>
+  <ReleaseDate>2020-09-10</ReleaseDate>
+  <Default>true</Default>
+  <ForcedInstallation>true</ForcedInstallation>
+  <Essential>true</Essential>
+  <Script>installscript.qs</Script>
+  <UpdateFile UncompressedSize="35068769" CompressedSize="8967378" OS="Any"/>
+  <DownloadableArchives>qt5.7z</DownloadableArchives>
+  <Licenses>
+   <License file="LGPL v3.txt" name="LGPL v3"/>
+  </Licenses>
+  <SHA1>f441ca848e06020b095ab0f841e79dd152bb8448</SHA1>
+ </PackageUpdate>
+</Updates>

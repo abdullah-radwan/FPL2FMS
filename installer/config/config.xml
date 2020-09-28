@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>FPL2FMS</Name>
+    <Version>1.0</Version>
+    <Title>FPL2FMS Installer</Title>
+    <Publisher>Abdullah Radwan</Publisher>
+    <InstallerApplicationIcon>../../res/icon</InstallerApplicationIcon>
+	<InstallerWindowIcon>../../res/icon</InstallerWindowIcon>
+    <StartMenuDir>FPL2FMS</StartMenuDir>
+    <TargetDir>@ApplicationsDirX86@/FPL2FMS</TargetDir>
+	<RemoteRepositories>
+     <Repository>
+		<Url>https://raw.githubusercontent.com/abdullah-radwan/FPL2FMS/master/installer/repository/win</Url>
+        <Enabled>1</Enabled>
+        <DisplayName>Main Repository</DisplayName>
+     </Repository>
+	</RemoteRepositories>
+</Installer>
