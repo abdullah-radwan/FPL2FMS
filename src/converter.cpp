@@ -16,13 +16,15 @@ void Converter::convert()
     pugi::xml_document doc;
     pugi::xml_parse_result result = doc.load_file(data.inputPath.toStdString().c_str());
 
-    if (result.status != pugi::status_ok) {
+    if (result.status != pugi::status_ok)
+    {
         qDebug() << "Error:" << result.description();
         emit error(result.description());
         return;
     }
 
-    for (const auto& fplWaypoint : doc.child("flight-plan").child("waypoint-table").children("waypoint")) {
+    for (const auto& fplWaypoint : doc.child("flight-plan").child("waypoint-table").children("waypoint"))
+    {
         Waypoint waypoint;
 
         waypoint.type = convertType(fplWaypoint.child_value("type"));
@@ -38,20 +40,15 @@ void Converter::convert()
 
 QString Converter::convertType(QString type)
 {
-    if (type == "AIRPORT")
-        return "1";
+    if (type == "AIRPORT") return "1";
 
-    if (type == "NDB")
-        return "2";
+    if (type == "NDB") return "2";
 
-    if (type == "VOR")
-        return "3";
+    if (type == "VOR") return "3";
 
-    if (type == "INT")
-        return "11";
+    if (type == "INT") return "11";
 
-    if (type == "USER WAYPOINT")
-        return "28";
+    if (type == "USER WAYPOINT") return "28";
 
     return "0";
 }
@@ -66,38 +63,39 @@ void Converter::setRoute()
 
     QStringList route = data.route.split(" ");
 
-    for (auto& waypoint : route) {
-        if (waypoint.isEmpty())
-            route.removeOne(waypoint);
-    }
+    for (auto& waypoint : route)
+        if (waypoint.isEmpty()) route.removeOne(waypoint);
 
     qDebug() << "Route:" << route;
 
-    for (auto& waypoint : waypoints) {
-        if (waypoint.ident == departure || waypoint.ident == arrival)
-            continue;
+    for (auto& waypoint : waypoints)
+    {
+        if (waypoint.ident == departure || waypoint.ident == arrival) continue;
 
-        if (route.empty()) {
+        if (route.empty())
+        {
             qDebug() << "Invalid route.";
             emit error("the flight route is invalid.");
             return;
         }
 
-        if (waypoint.ident == route.first()) {
+        if (waypoint.ident == route.first())
+        {
             waypoint.airway = "DRCT";
-
             route.removeFirst();
 
             continue;
         }
 
-        if (route.size() < 2) {
+        if (route.size() < 2)
+        {
             qDebug() << "Invalid route" << route;
             emit error("the flight route is invalid.");
             return;
         }
 
-        if (waypoint.ident == route.at(1)) {
+        if (waypoint.ident == route.at(1))
+        {
             waypoint.airway = route.first();
 
             route.removeFirst();
@@ -117,7 +115,8 @@ void Converter::writeFMS()
     qDebug() << "Writing into" << data.outputPath;
     QFile file(data.outputPath);
 
-    if (!file.open(QIODevice::WriteOnly)) {
+    if (!file.open(QIODevice::WriteOnly))
+    {
         qDebug() << "Couldn't open the FMS file";
         emit error("couldn't create the FMS file.");
         return;
@@ -136,7 +135,15 @@ void Converter::writeFMS()
 
     file.close();
 
-    qDebug() << "File converted successfully";
+    if (data.deleteFPL)
+    {
+        QFile fplFile(data.inputPath);
+
+        if (fplFile.remove()) qDebug() << "The FPL file was deleted successfully";
+        else qDebug() << "Couldn't delete the FPL file";
+    }
+
+    qDebug() << "The file converted was successfully";
 
     emit done();
 }
@@ -144,31 +151,32 @@ void Converter::writeFMS()
 QString Converter::getCycle()
 {
     QDate currentDate = QDate::currentDate();
-    QDate date = QDate::fromString("2020/09/10", "yyyy/MM/dd");
+    QDate date = QDate::fromString("2021/01/28", "yyyy/MM/dd");
 
-    int cycle = 10;
+    int cycle = 1;
     int year = date.year();
 
     QMap<QDate, int> cycleMap;
     cycleMap.insert(date, cycle);
 
-    while (true) {
+    while (true)
+    {
         date = date.addDays(28);
 
-        if (currentDate.daysTo(date) >= 0) {
+        if (currentDate.daysTo(date) >= 0)
+        {
             QString lastCycle;
 
-            if (cycleMap.last() < 10)
-                lastCycle = "0" + QString::number(cycleMap.last());
-            else
-                lastCycle = QString::number(cycleMap.last());
+            if (cycleMap.last() < 10) lastCycle = "0" + QString::number(cycleMap.last());
+            else lastCycle = QString::number(cycleMap.last());
 
-            QString sCycle = QString::number(cycleMap.lastKey().year()).remove(0,2) + lastCycle;
+            QString sCycle = QString::number(cycleMap.lastKey().year()).remove(0, 2) + lastCycle;
             qDebug() << "Cycle:" << sCycle;
             return sCycle;
         }
 
-        if (date.year() > year) {
+        if (date.year() > year)
+        {
             cycleMap.clear();
             cycle = 0;
             year = date.year();

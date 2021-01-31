@@ -2,8 +2,8 @@
 <Package>
     <DisplayName>FPL2FMS</DisplayName>
     <Description>Install FPL2FMS.</Description>
-    <Version>1.0</Version>
-    <ReleaseDate>2020-09-28</ReleaseDate>
+    <Version>1.1</Version>
+    <ReleaseDate>2021-01-31</ReleaseDate>
     <Licenses>
         <License name="GPL v3" file="GPL v3.txt" />
 		<License name="MIT" file="MIT.txt" />

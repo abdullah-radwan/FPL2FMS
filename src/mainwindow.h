@@ -31,19 +31,18 @@ private slots:
     void on_fplButton_clicked();
     void on_convertButton_clicked();
     void on_aboutAction_triggered();
-
     void on_checkAction_triggered();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow* ui;
     QSettings settings;
-    QtAutoUpdater::Updater *updater;
+    QtAutoUpdater::Updater* updater;
 
     QString inputFolder;
     QString outputFolder;
     bool checkUpdates;
 
-    Converter *converter;
+    Converter* converter;
     QThread converterThread;
 
     void readConfig();

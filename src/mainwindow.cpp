@@ -17,8 +17,7 @@ MainWindow::MainWindow(QString dirPath) : ui(new Ui::MainWindow), settings(dirPa
 
     show();
 
-    if (checkUpdates)
-        on_checkAction_triggered();
+    if (checkUpdates) on_checkAction_triggered();
 }
 
 void MainWindow::readConfig()
@@ -27,7 +26,18 @@ void MainWindow::readConfig()
 
     inputFolder = settings.value("InputFolder").toString();
     outputFolder = settings.value("OutputFolder").toString();
+    ui->deleteCheck->setChecked(settings.value("DeleteFPL", true).toBool());
     checkUpdates = settings.value("CheckDate", 0).toDate().addDays(14) <= QDate::currentDate();
+
+    settings.endGroup();
+
+    settings.beginGroup("MainWindow");
+
+    QSize size = settings.value("Size", QSize(-1, -1)).toSize();
+    if (size != QSize(-1, -1)) resize(size);
+
+    QPoint pos = settings.value("Pos", QPoint(-1, -1)).toPoint();
+    if (pos != QPoint(-1, -1)) move(pos);
 
     settings.endGroup();
 }
@@ -51,20 +61,21 @@ void MainWindow::setConverter()
 
 void MainWindow::setUpdater()
 {
-    updater = QtAutoUpdater::Updater::create("qtifw", {{"path", qApp->applicationDirPath() + "/maintenancetool"}},
-                                             qApp);
+    updater = QtAutoUpdater::Updater::create("qtifw", {{"path", qApp->applicationDirPath() + "/maintenancetool"}}, qApp);
 
-    if (updater) {
-        connect(updater, &QtAutoUpdater::Updater::checkUpdatesDone, [&](QtAutoUpdater::Updater::State
-                state) {
-            switch (state) {
+    if (updater)
+    {
+        connect(updater, &QtAutoUpdater::Updater::checkUpdatesDone, [&](QtAutoUpdater::Updater::State state)
+        {
+            switch (state)
+            {
             case QtAutoUpdater::Updater::State::Error:
                 qDebug() << "An error occured";
                 checkUpdates = false;
                 break;
 
             case QtAutoUpdater::Updater::State::NoUpdates:
-                qDebug() << "No updates are found";
+                qDebug() << "No updates were found";
                 break;
 
             case QtAutoUpdater::Updater::State::NewUpdates:
@@ -75,17 +86,15 @@ void MainWindow::setUpdater()
                 break;
             }
         });
-    } else {
-        qDebug() << "Couldn't create the updater";
     }
+    else qDebug() << "Couldn't create the updater";
 }
 
 void MainWindow::on_fplButton_clicked()
 {
     QString path = QFileDialog::getOpenFileName(this, "Select FPL File", inputFolder, "FPL Files (*.fpl)");
 
-    if (path.isEmpty())
-        return;
+    if (path.isEmpty()) return;
 
     inputFolder = QFileInfo(path).absolutePath();
 
@@ -96,40 +105,43 @@ void MainWindow::on_fplButton_clicked()
 
 void MainWindow::on_convertButton_clicked()
 {
-    if (converter->data.inputPath.isEmpty()) {
+    if (converter->data.inputPath.isEmpty())
+    {
         statusBar()->showMessage("You must choose an FPL file.");
         return;
     }
 
     converter->data.route = ui->routeEdit->text();
 
-    if (converter->data.route.isEmpty()) {
+    if (converter->data.route.isEmpty())
+    {
         statusBar()->showMessage("The flight route can't be empty.");
         return;
     }
 
     QString savePath;
 
-    if (outputFolder.isEmpty()) {
+    if (outputFolder.isEmpty())
+    {
         savePath = converter->data.inputPath;
         savePath.remove(".fpl");
-    } else {
-        savePath = outputFolder;
+        savePath.append(".fms");
     }
+    else savePath = outputFolder + "/" + QFileInfo(converter->data.inputPath).baseName().append(".fms");
 
     QString path = QFileDialog::getSaveFileName(this, "Save FMS File", savePath, "FMS Files (*.fms)");
 
-    if (path.isEmpty())
-        return;
+    if (path.isEmpty()) return;
 
-    if (!path.endsWith(".fms", Qt::CaseInsensitive))
-        path.append(".fms");
+    if (!path.endsWith(".fms", Qt::CaseInsensitive)) path.append(".fms");
 
     ui->convertButton->setEnabled(false);
 
     outputFolder = QFileInfo(path).absolutePath();
 
     converter->data.outputPath = path;
+
+    converter->data.deleteFPL = ui->deleteCheck->isChecked();
 
     emit convert();
 }
@@ -153,15 +165,15 @@ void MainWindow::onError(QString error)
 
 void MainWindow::on_checkAction_triggered()
 {
-    if (!updater) {
+    if (!updater)
+    {
         QMessageBox::warning(this, "Updater initialization", "Couldn't initialize the updater.");
         return;
     }
 
     qDebug() << "Starting updater";
 
-    (new QtAutoUpdater::UpdateController(updater, this))->
-            start(QtAutoUpdater::UpdateController::DisplayLevel::ExtendedInfo);
+    (new QtAutoUpdater::UpdateController(updater, this))->start(QtAutoUpdater::UpdateController::DisplayLevel::ExtendedInfo);
 }
 
 
@@ -170,8 +182,8 @@ void MainWindow::on_aboutAction_triggered()
     QMessageBox::about(this, "FPL2FMS", "FPL2FMS\n"
                                         "An app to convert Garmin FPL files to X-Plane 11 FMS files.\n\n"
 
-                                        "Version: 1.0\n"
-                                        "Release date: 28 September 2020\n\n"
+                                        "Version: 1.1\n"
+                                        "Release date: 31 January 2021\n\n"
 
                                         "Copyright © Abdullah Radwan");
 }
@@ -182,9 +194,16 @@ void MainWindow::writeConfig()
 
     settings.setValue("InputFolder", inputFolder);
     settings.setValue("OutputFolder", outputFolder);
+    settings.setValue("DeleteFPL", ui->deleteCheck->isChecked());
 
-    if (checkUpdates || !settings.value("CheckDate", 0).toDate().isValid())
-        settings.setValue("CheckDate", QDate::currentDate());
+    if (checkUpdates || !settings.value("CheckDate", 0).toDate().isValid()) settings.setValue("CheckDate", QDate::currentDate());
+
+    settings.endGroup();
+
+    settings.beginGroup("MainWindow");
+
+    settings.setValue("Size", size());
+    settings.setValue("Pos", pos());
 
     settings.endGroup();
 }

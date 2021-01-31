@@ -20,10 +20,11 @@ INCLUDEPATH += ../lib/include
 
 LIBS += -L../lib -lpugixml
 
-VERSION = 1.0
+VERSION = 1.1
 
-win32 {
-RC_ICONS = ../res/icon.ico
-QMAKE_TARGET_DESCRIPTION = Convert Garmin FPL files to X-Plane 11 FMS files.
-QMAKE_TARGET_COPYRIGHT = Copyright 2020, Abdullah Radwan
+win32
+{
+    RC_ICONS = ../res/icon.ico
+    QMAKE_TARGET_DESCRIPTION = Convert Garmin FPL files to X-Plane 11 FMS files.
+    QMAKE_TARGET_COPYRIGHT = Copyright 2020-2021, Abdullah Radwan
 }

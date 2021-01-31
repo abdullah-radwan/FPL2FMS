@@ -7,13 +7,16 @@ Component.prototype.createOperations = function()
 {
     component.createOperations();
 
-    if (systemInfo.productType === "windows") {
+    if (systemInfo.productType === "windows")
+	{
         component.addOperation("CreateShortcut", "@TargetDir@/FPL2FMS.exe", "@StartMenuDir@/FPL2FMS.lnk",
             "workingDirectory=@TargetDir@");
 			
-        component.addOperation("CreateShortcut", "@TargetDir@/FPL2FMS.exe", "@DesktopDir@/FPL2FMS",
+        component.addOperation("CreateShortcut", "@TargetDir@/FPL2FMS.exe", "@DesktopDir@/FPL2FMS.lnk",
             "workingDirectory=@TargetDir@");
-    } else {
+    }
+	else
+	{
 		component.addElevatedOperation("Execute", "chmod", "-R", "755", "@TargetDir@");
 		
 		component.addElevatedOperation("CreateDesktopEntry", 

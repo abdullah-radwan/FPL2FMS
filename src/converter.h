@@ -7,10 +7,12 @@ class Converter : public QObject
 {
     Q_OBJECT
 public:
-    struct data {
+    struct Data
+    {
         QString inputPath;
         QString route;
         QString outputPath;
+        bool deleteFPL;
     } data;
 
 signals:
@@ -22,7 +24,8 @@ public slots:
     void convert();
 
 private:
-    struct Waypoint {
+    struct Waypoint
+    {
         QString type;
         QString ident;
         QString airway;

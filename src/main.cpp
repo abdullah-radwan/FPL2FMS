@@ -6,7 +6,7 @@
 #include <QDir>
 #include <QDebug>
 
-static QFile *logFile;
+static QFile* logFile;
 
 void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     app.setApplicationName("FPL2FMS");
     app.setApplicationDisplayName("FPL2FMS");
-    app.setApplicationVersion("1.0");
+    app.setApplicationVersion("1.1");
 
     QString dirPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     QDir(dirPath).mkpath(".");
@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 
     qInstallMessageHandler(messageHandler);
 
-    qDebug() << "FPL2FMS 1.0, 28 September 2020";
+    qDebug() << "FPL2FMS 1.1, 31 January 2021";
     qDebug() << "Current date:" << QDateTime::currentDateTime().toString("yyyy-MM-dd");
 
     MainWindow mainWindow(dirPath);
